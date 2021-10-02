@@ -3,7 +3,7 @@
         <div class="class">
             <div class="col-md-6">
                 <h2 class="text-center">Edit Product</h2>
-                <form method="GET" id="add-product" action="/admin/edit-product" enctype="multipart/form-data">
+                <form method="POST" id="add-product" action="/admin/edit-product/{{product._id}}" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="pname">Product name<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="pname" name="pname" value="{{product.pname}}">

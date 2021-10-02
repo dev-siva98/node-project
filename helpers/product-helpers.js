@@ -30,6 +30,20 @@ module.exports={
     })
 })
 
+},
+updateProduct:(proId,proDetails)=>{
+    return new Promise(async(resolve,reject)=>{
+       await db.get().collection(collection.PRODUCT_COLLECTION)
+        .updateOne({_id:objectId(proId)},{
+            $set:{
+                pname:proDetails.pname,
+                category:proDetails.category,
+                description:proDetails.category
+            }
+        }).then((response)=>{
+            resolve()
+        })
+    })
 }
 
 
