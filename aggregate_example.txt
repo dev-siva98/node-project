@@ -1,0 +1,25 @@
+cartItems= db.get().collection.('product').aggregate([
+	{
+		$match:{user:objectId(userId)}  ///find the user's cart from the collection of cart
+	},
+	{
+		$lookup:{
+			from:'product',
+			let:{prodList:'$products'}   ///take all product's ID saved in array named 'products' inside user cart, into prodList
+			pipeline:[
+				{
+					$match:{
+						$expr:{
+							$in:['$_id','$$prodList']  ///match ID's of the product from collection 'product' with ID's in prodList
+							}
+						}
+				}
+				]as:'cartItems' 
+			}
+	}
+	]).toArray()
+resolve(cartItems)
+
+/////
+userId come as argument and contains the userID of the user who requested cart.
+product-> name of the collection conaining all products.
