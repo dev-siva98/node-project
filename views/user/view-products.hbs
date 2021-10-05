@@ -1,6 +1,6 @@
     <section>
         <div class="container mt-5">
-            <div class="row">
+            <div class="row text-center">
                 {{#each products}}
 
                 <div class="col-md-3 p-3">
@@ -8,6 +8,7 @@
                         <img src="/product-images/{{this._id}}.jpg" class="card-img-top" alt="..." style="height: 11rem;">
                         <div class="card-body">
                             <h5 class="card-title">{{this.pname}}</h5>
+                            <p class="card-text "><b>₹{{this.price}}</b></p>
                             <p class="card-text">{{this.description}}</p>
                             <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add to Cart</button>
                         </div>

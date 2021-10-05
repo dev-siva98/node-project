@@ -4,7 +4,14 @@ var objectId=require('mongodb').ObjectId
 module.exports={
 
     addProduct:(product,callback)=>{
-        db.get().collection('product').insertOne(product).then((data)=>{
+        let proDetail={
+            pname:product.pname,
+            category:product.category,
+            description:product.description,
+            price:parseInt(product.price)
+
+        }
+        db.get().collection('product').insertOne(proDetail).then((data)=>{
             callback(data.insertedId)
 
         })
@@ -38,7 +45,9 @@ updateProduct:(proId,proDetails)=>{
             $set:{
                 pname:proDetails.pname,
                 category:proDetails.category,
-                description:proDetails.category
+                description:proDetails.description,
+                price:parseInt(proDetails.price)
+                
             }
         }).then((response)=>{
             resolve()
