@@ -121,15 +121,17 @@ module.exports = {
         })
     },
     changeProductQuantity: (details) => {
-        quantity = parseInt(details.quantity)
-        count = parseInt(details.count)
+        quantity=parseInt(details.quantity)
+        count=parseInt(details.count)
         return new Promise((resolve, reject) => {
-            if (count == -1 && quantity == 1) {
+            console.log("#####"+details.count+'&&'+details.quantity);
+            if (details.count == -1 && quantity == 1) {
+                
                 db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cart) },
                     {
                         $pull: { products: { item: objectId(details.product) } }
                     }
-                ).then((response) => {
+                ).then(() => {
 
                     resolve({ removeProduct: true })
                 })
@@ -137,8 +139,8 @@ module.exports = {
                 db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cart), 'products.item': objectId(details.product) },
                     {
                         $inc: { 'products.$.quantity': count }
-                    }).then((response) => {
-                        resolve(response)
+                    }).then(() => {
+                        resolve({status:true})
                     })
 
             }
