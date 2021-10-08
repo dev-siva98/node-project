@@ -1,4 +1,5 @@
 var express = require('express');
+const { Db } = require('mongodb');
 var router = express.Router();
 var productHelpers=require('../helpers/product-helpers')
 var userHelpers=require('../helpers/user-helpers')
@@ -11,7 +12,6 @@ const verifyLogin=(req,res,next)=>{
   res.redirect('/login')
   }
 }
-
 /* GET home page. */
 router.get('/',async function(req, res, next) {
 
@@ -90,9 +90,17 @@ router.post('/remove-item',(req,res)=>{
   })
 })
 
-router.get('/place-order',verifyLogin,(req,res)=>{
-  userHelpers.getTotalAmount(req.session.user._id).then((total=>{
+router.get('/place-order',verifyLogin,async (req,res)=>{
+  let total=await userHelpers.getTotalAmount(req.session.user._id)
     res.render('user/place-order',{total,user:req.session.user})
-  }))
 })
+router.post('/place-order',async (req,res)=>{
+  let products=await userHelpers.getCartProductList(req.body.userId)
+  let totalPrice=await userHelpers.getTotalAmount(req.body.userId)
+  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
+    res.json({status:true})
+
+  })
+})
+
 module.exports = router;

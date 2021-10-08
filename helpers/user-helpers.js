@@ -160,6 +160,9 @@ module.exports = {
     },
     getTotalAmount: (userId) => {
         return new Promise(async(resolve, reject) => {
+            cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+            if(cart)
+            {
             let total = await db.get().collection(collection.CART_COLLECTION).aggregate([
                 {
                     $match: { user: objectId(userId) }
@@ -200,9 +203,39 @@ module.exports = {
                     }
                 }
             ]).toArray()
-            console.log(total[0].total)
             resolve(total[0].total)
+        }
+        else
+        {
+            resolve({total:'0'})
+        }
         })
-    }
-
+    },
+    placeOrder:(order,products,total)=>{
+        return new Promise((resolve,reject)=>{
+            let status=order.payment==='cod'?'placed':'pending'
+            let orderObj={
+                deliverDetails:{
+                address:order.address,
+                pincode:order.pincode,
+                mobile:order.mobile
+                },
+                userId:objectId(order.userId),
+                payment:order.payment,
+                products:products,
+                total:total,
+                status:status
+            }
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then(()=>{
+                db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
+                resolve()
+            })
+        })
+    },
+    getCartProductList:(userId)=>{
+        return new Promise(async (resolve,reject)=>{
+            let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+            resolve(cart.products)
+        })
+    },
 }

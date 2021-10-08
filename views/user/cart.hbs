@@ -13,7 +13,6 @@
             <tbody style="vertical-align: middle;">
                 
                 {{#each products}}
-                <p>{{this.quantity}}</p>
 
                 <tr>
 
@@ -56,7 +55,6 @@
 
         let quantity =parseInt(document.getElementById(proId).innerHTML)
         count = parseInt(count)
-        alert(quantity)
         $.ajax({
             url: '/change-product-quantity',
             data: {
