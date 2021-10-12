@@ -1,3 +1,17 @@
 <section>
-    <h3>My Orders</h3>
+    <div class="container">
+        <div class="m-3 p-3">
+            <h2 class="text-center">My Orders</h2>
+            <hr>
+                {{#each order}}
+                <div class="row align-items-center my-3 text-center bg-light">
+                    <div class="col-md-3 float-center"><img style="width: 70px; height: 70px;" src="/product-images/{{this.product._id}}.jpg" lt=""></div>
+                    <div class="col-md-3">{{this.product.pname}}</div>
+                    <div class="col-md-3">{{this.product.price}}</div>
+                    <div class="col-md-3">{{this.quantity}}</div>
+                </div>
+                {{/each}}
+                </div>
+    </div>
+
 </section>

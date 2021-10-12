@@ -1,4 +1,4 @@
-<header class="container-fluid">
+<header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Shopping Cart</a>
@@ -17,14 +17,14 @@
                     </li>
                     {{#if user}}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Orders</a>
+                        <a class="nav-link" href="/order-success">Orders</a>
                     </li>
                     {{/if}}
 
                 </ul>
-                <div class="dropdown">
+                <div class="dropdown" >
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                        data-bs-toggle="dropdown" aria-expanded="false" style="width: 10rem">
                         {{#if user}}
                         {{user.fname}}
                         {{else}}

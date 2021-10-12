@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="/stylesheets/style.css">
+
+<section class="main-body mt-0">
+    <div class="container-fluid  d-flex justify-content-center">
+        {{#if orderStatus}}
+        <div class="card card-1 mt-5">
+            <div class="card-header bg-white">
+                <div class="media row justify-content-between my-3 ">
+                    <div class="col-md-6">
+                        <h4 class="mb-0">Thanks for your Order,<span class="change-color">{{user.fname}}</span> !</h4>
+                    </div>
+                    
+                    <div class="col-md-6 text-center pl-0">
+                        <a href="/orders" class="btn float-end m-0 text-white" style="background-color: #AB47BC;">View All Orders</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-between mb-3">
+                    <div class="col-auto">
+                        <h6 class="color-1 mb-0 change-color">Receipt</h6>
+                    </div>
+                    <div class="col-auto"> <small>Receipt Voucher : <span class="text-uppercase"> {{order._id}}
+                            </span></small> </div>
+                </div>
+                {{#each items}}
+                <div class="card card-2 mb-1">
+                    <div class="row card-body media align-items-center text-center">
+                        <div class="sq col-md-3 "> <img class="img-fluid align-self-center mr-2 mr-md-4 pl-0 p-0 m-0"
+                                src="/product-images/{{this.proId}}.jpg" width="80" height="80" />
+                        </div>
+                        <div class="col-md-4 " >
+                            <h5 class="mb-0 " style="font-size: 1.15rem;"> {{this.pname}}</h5>
+                        </div>
+                        <div class="col-md-2"> <small>Qty : {{this.quantity}}</small></div>
+                        <div class="col-md-3">
+                            <h6 class="mb-0">&#8377;{{this.price}}.00</h6>
+                        </div>
+                    </div>
+                </div>{{/each}}
+                <div class="row mt-3 mb-0">
+                    <div class="col bold">
+                        <p class="mb-1">Address : {{order.deliveryDetails.address}}</p>
+                        <p class="mb-1">Pincode : {{order.deliveryDetails.pincode}}</p>
+                        <p class="mb-1">Mobile : {{order.deliveryDetails.mobile}}</p>
+                        <p class="mb-1">Order Date : {{order.date}}</p>
+                        <p class="mb-1 ">Payment Mode : <span class="text-uppercase"> {{order.payment}}</span></p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="jumbotron-fluid">
+                    <div class="row justify-content-between ">
+                        <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center "
+                                src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"></div>
+                        <div class="col-auto my-auto ">
+                            <h2 class="mb-0 font-weight-bold">TOTAL PAID</h2>
+                        </div>
+                        <div class="col-auto my-auto ml-auto">
+                            <h1 class="display-3 ">&#8377; {{order.total}}</h1>
+                        </div>
+                    </div>
+                    <div class="row mb-3 mt-3 mt-md-0">
+                        <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
+                        <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
+                        <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <h1 class="mt-5">No orders Yet!!!</h1>
+        {{/if}}
+    </div>
+</section>

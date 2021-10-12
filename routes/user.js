@@ -65,7 +65,6 @@ router.get('/cart',verifyLogin,async(req,res)=>{
   let products=await userHelpers.getCartProducts(req.session.user._id)
   let totalAmount=await userHelpers.getTotalAmount(req.session.user._id)
   res.render('user/cart',{products,user:req.session.user,totalAmount})
-  console.log('*****'+products);
 })
 
 router.get('/add-to-cart/:id',((req,res)=>{
@@ -78,7 +77,6 @@ router.get('/add-to-cart/:id',((req,res)=>{
 router.post('/change-product-quantity',async (req,res,next)=>{
   console.log(req.body);
   await userHelpers.changeProductQuantity(req.body).then(async(response)=>{
-    console.log(response);
     response.total=await userHelpers.getTotalAmount(req.body.user)
     res.json(response)
   })
@@ -98,8 +96,41 @@ router.post('/place-order',async (req,res)=>{
   let products=await userHelpers.getCartProductList(req.body.userId)
   let totalPrice=await userHelpers.getTotalAmount(req.body.userId)
   userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
+    console.log(response);
     res.json({status:true})
 
+  })
+})
+// router.get('/order-success',verifyLogin,(req,res)=>{
+//   userHelpers.getOrderDetails(req.session.user._id).then(async(order)=>{
+//     if(order.cart){
+//     const items=[]
+//     for (let i = 0; i < order.products.length; i++) {
+//       let items =await productHelpers.getProductDetails(order.products[i].item);
+      // items[i]=item
+      // items[i].proId=order.products[i].item
+      // items[i].quantity=order.products[i].quantity
+      // console.log(items[i])
+      // orderStatus=true
+//     }
+//     res.render('user/order-success',{user:req.session.user,order,items,orderStatus})
+//     console.log(order.products[0]);
+//   }
+//   else
+//   {
+//     orderStatus=false
+//     res.render('user/order-success',{user:req.session.user,orderStatus})
+//   }
+  
+//   })
+// })
+router.get('/orders',(req,res)=>{
+  res.render('user/orders',{user:req.session.user})
+})
+
+router.get('/order-success',verifyLogin,(req,res)=>{
+  userHelpers.getOrderProducts(req.session.user._id).then((order)=>{
+    res.render('user/orders',{user:req.session.user,order})
   })
 })
 
