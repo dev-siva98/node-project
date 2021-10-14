@@ -83,6 +83,7 @@ router.post('/change-product-quantity',async (req,res,next)=>{
 })
 
 router.post('/remove-item',(req,res)=>{
+  console.log(req.body);
   userHelpers.removeItem(req.body).then((response)=>{
     res.json(response)
   })
@@ -95,43 +96,26 @@ router.get('/place-order',verifyLogin,async (req,res)=>{
 router.post('/place-order',async (req,res)=>{
   let products=await userHelpers.getCartProductList(req.body.userId)
   let totalPrice=await userHelpers.getTotalAmount(req.body.userId)
-  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    console.log(response);
-    res.json({status:true})
+  userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
+    orderId=orderId.toString()
+    console.log(orderId.toString());
+    res.json({status:true,orderId})
 
   })
 })
-// router.get('/order-success',verifyLogin,(req,res)=>{
-//   userHelpers.getOrderDetails(req.session.user._id).then(async(order)=>{
-//     if(order.cart){
-//     const items=[]
-//     for (let i = 0; i < order.products.length; i++) {
-//       let items =await productHelpers.getProductDetails(order.products[i].item);
-      // items[i]=item
-      // items[i].proId=order.products[i].item
-      // items[i].quantity=order.products[i].quantity
-      // console.log(items[i])
-      // orderStatus=true
-//     }
-//     res.render('user/order-success',{user:req.session.user,order,items,orderStatus})
-//     console.log(order.products[0]);
-//   }
-//   else
-//   {
-//     orderStatus=false
-//     res.render('user/order-success',{user:req.session.user,orderStatus})
-//   }
+router.get('/order-success/:id',async(req,res)=>{
+  orderId=req.params.id
+  let details=await userHelpers.getPresentOrder(orderId)
+  console.log(details);
+  userHelpers.getOrderProducts(orderId).then((order)=>{
+    res.render('user/order-success',{user:req.session.user,order,details})
+  })
   
-//   })
-// })
-router.get('/orders',(req,res)=>{
-  res.render('user/orders',{user:req.session.user})
 })
-
-router.get('/order-success',verifyLogin,(req,res)=>{
-  userHelpers.getOrderProducts(req.session.user._id).then((order)=>{
-    res.render('user/orders',{user:req.session.user,order})
-  })
+router.get('/orders',(req,res)=>{
+  userHelpers.getOrderDetails(req.session.user._id).then((order)=>{
+  res.render('user/orders',{user:req.session.user,order})
+})
 })
 
 module.exports = router;

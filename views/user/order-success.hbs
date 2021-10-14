@@ -2,7 +2,6 @@
 
 <section class="main-body mt-0">
     <div class="container-fluid  d-flex justify-content-center">
-        {{#if orderStatus}}
         <div class="card card-1 mt-5">
             <div class="card-header bg-white">
                 <div class="media row justify-content-between my-3 ">
@@ -20,31 +19,31 @@
                     <div class="col-auto">
                         <h6 class="color-1 mb-0 change-color">Receipt</h6>
                     </div>
-                    <div class="col-auto"> <small>Receipt Voucher : <span class="text-uppercase"> {{order._id}}
+                    <div class="col-auto"> <small>Receipt Voucher : <span class="text-uppercase fw-bold"> {{details._id}}
                             </span></small> </div>
                 </div>
-                {{#each items}}
+                {{#each order}}
                 <div class="card card-2 mb-1">
                     <div class="row card-body media align-items-center text-center">
                         <div class="sq col-md-3 "> <img class="img-fluid align-self-center mr-2 mr-md-4 pl-0 p-0 m-0"
-                                src="/product-images/{{this.proId}}.jpg" width="80" height="80" />
+                                src="/product-images/{{this.product._id}}.jpg" width="80" height="80" />
                         </div>
                         <div class="col-md-4 " >
-                            <h5 class="mb-0 " style="font-size: 1.15rem;"> {{this.pname}}</h5>
+                            <h5 class="mb-0 " style="font-size: 1.15rem;"> {{this.product.pname}}</h5>
                         </div>
                         <div class="col-md-2"> <small>Qty : {{this.quantity}}</small></div>
                         <div class="col-md-3">
-                            <h6 class="mb-0">&#8377;{{this.price}}.00</h6>
+                            <h6 class="mb-0">&#8377;{{this.product.price}}.00</h6>
                         </div>
                     </div>
                 </div>{{/each}}
                 <div class="row mt-3 mb-0">
                     <div class="col bold">
-                        <p class="mb-1">Address : {{order.deliveryDetails.address}}</p>
-                        <p class="mb-1">Pincode : {{order.deliveryDetails.pincode}}</p>
-                        <p class="mb-1">Mobile : {{order.deliveryDetails.mobile}}</p>
-                        <p class="mb-1">Order Date : {{order.date}}</p>
-                        <p class="mb-1 ">Payment Mode : <span class="text-uppercase"> {{order.payment}}</span></p>
+                        <p class="mb-1">Address : {{details.delivery.address}}</p>
+                        <p class="mb-1">Pincode : {{details.delivery.pincode}}</p>
+                        <p class="mb-1">Mobile : {{details.delivery.mobile}}</p>
+                        <p class="mb-1">Order Date : {{details.date}}</p>
+                        <p class="mb-1 ">Payment Mode : <span class="text-uppercase"> {{details.payment}}</span></p>
 
                     </div>
                 </div>
@@ -58,7 +57,7 @@
                             <h2 class="mb-0 font-weight-bold">TOTAL PAID</h2>
                         </div>
                         <div class="col-auto my-auto ml-auto">
-                            <h1 class="display-3 ">&#8377; {{order.total}}</h1>
+                            <h1 class="display-3 ">&#8377; {{details.total}}</h1>
                         </div>
                     </div>
                     <div class="row mb-3 mt-3 mt-md-0">
@@ -69,8 +68,5 @@
                 </div>
             </div>
         </div>
-        {{else}}
-        <h1 class="mt-5">No orders Yet!!!</h1>
-        {{/if}}
     </div>
 </section>
