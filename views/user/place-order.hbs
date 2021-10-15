@@ -12,14 +12,14 @@
                             <p class="card-body">Payment Method</p>
                             <div class="d-flex" style="justify-content: space-evenly;">
                                 <div class="form-check">
-                                    <label  for="online">
-                                    <input class="form-check-input" type="radio" name="payment" value="online" id="online" checked>
+                                    <label  for="ONLINE">
+                                    <input class="form-check-input" type="radio" name="payment" value="ONLINE" id="ONLINE" checked>
                                         Pay Now
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <label  for="cod">
-                                    <input class="form-check-input" type="radio" name="payment" id="cod" value="cod">
+                                    <label  for="COD">
+                                    <input class="form-check-input" type="radio" name="payment" id="COD" value="COD">
                                         Cash on Delivery
                                     </label>
                                 </div>
@@ -44,7 +44,9 @@
                             placeholder="Enter Your Number">
                     </div>
                     <input type="text" name="userId" id="" value="{{user._id}}" hidden>
-                    <input type="submit" class="btn btn-primary mt-4" style="width: 100%; font-size: large;" value="Place Order">
+
+                    <button type="submit" class="btn btn-primary mt-4" style="width: 100%; font-size: large;" onclick="spinner()"><span class="defaultButton">Place Order</span><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  </button>
                 </div>
             </div>
         </form>
@@ -59,13 +61,20 @@
             method: 'post',
             data: $('#order-form').serialize(),
             success: (response) => {
-                if(response.status)
+                if(response.codPayment)
                 {
+                    location.href='/order-success/'+response.orderId
+                }
+                else{
+                    alert('Payment Success')
                     location.href='/order-success/'+response.orderId
                 }
             }
         })
     })
+    function spinner()=>{
+        document.getElementsByClassName("defaultButton")[0].style.display = "block";
+    }
 
 
 </script>

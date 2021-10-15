@@ -98,9 +98,15 @@ router.post('/place-order',async (req,res)=>{
   let totalPrice=await userHelpers.getTotalAmount(req.body.userId)
   userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
     orderId=orderId.toString()
-    console.log(orderId.toString());
-    res.json({status:true,orderId})
-
+    if(req.body.payment=='COD'){
+      res.json({codPayment:true,orderId})
+    }
+    else{
+      userHelpers.generateRazorpay(orderId,totalPrice).then((order)=>{
+        order
+        res.json({orderId,order})
+      })
+    }
   })
 })
 router.get('/order-success/:id',async(req,res)=>{
