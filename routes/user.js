@@ -1,3 +1,4 @@
+const { response } = require('express');
 var express = require('express');
 const { Db } = require('mongodb');
 var router = express.Router();
@@ -103,8 +104,7 @@ router.post('/place-order',async (req,res)=>{
     }
     else{
       userHelpers.generateRazorpay(orderId,totalPrice).then((order)=>{
-        order
-        res.json({orderId,order})
+        res.json(order)
       })
     }
   })
@@ -122,6 +122,17 @@ router.get('/orders',(req,res)=>{
   userHelpers.getOrderDetails(req.session.user._id).then((order)=>{
   res.render('user/orders',{user:req.session.user,order})
 })
+})
+router.post('/verify-payment',(req,res)=>{
+  userHelpers.verifyPayment(req.body).then(()=>{
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+      let orderId=req.body['order[receipt]']
+      console.log('Payment success');
+      res.json({status:true,orderId})
+    })
+  }).catch((err)=>{
+    res.json({status:false,errMsg:'Failed'})
+  })
 })
 
 module.exports = router;

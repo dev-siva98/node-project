@@ -12,14 +12,16 @@
                             <p class="card-body">Payment Method</p>
                             <div class="d-flex" style="justify-content: space-evenly;">
                                 <div class="form-check">
-                                    <label  for="ONLINE">
-                                    <input class="form-check-input" type="radio" name="payment" value="ONLINE" id="ONLINE" checked>
+                                    <label for="ONLINE">
+                                        <input class="form-check-input" type="radio" name="payment" value="ONLINE"
+                                            id="ONLINE" checked>
                                         Pay Now
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <label  for="COD">
-                                    <input class="form-check-input" type="radio" name="payment" id="COD" value="COD">
+                                    <label for="COD">
+                                        <input class="form-check-input" type="radio" name="payment" id="COD"
+                                            value="COD">
                                         Cash on Delivery
                                     </label>
                                 </div>
@@ -45,15 +47,16 @@
                     </div>
                     <input type="text" name="userId" id="" value="{{user._id}}" hidden>
 
-                    <button type="submit" class="btn btn-primary mt-4" style="width: 100%; font-size: large;" onclick="spinner()"><span class="defaultButton">Place Order</span><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  </button>
+                    <button type="submit" class="btn btn-primary mt-4" style="width: 100%; font-size: large;">
+                        <span class="defaultButton">Place Order</span><span
+                            class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
         </form>
     </div>
 </section>
 <script>
-
     $("#order-form").submit((e) => {
         e.preventDefault()
         $.ajax({
@@ -61,19 +64,58 @@
             method: 'post',
             data: $('#order-form').serialize(),
             success: (response) => {
-                if(response.codPayment)
-                {
-                    location.href='/order-success/'+response.orderId
+                if (response.codPayment) {
+                    location.href ='/order-success/'+response.orderId
                 }
-                else{
-                    alert('Payment Success')
-                    location.href='/order-success/'+response.orderId
+                else {
+                    razorpayPayment(response)
                 }
             }
         })
     })
-    function spinner()=>{
-        document.getElementsByClassName("defaultButton")[0].style.display = "block";
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_VIaTvTwdgHBzdl", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Shopping Cart",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                verifyPayment(response,order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    function verifyPayment(payment,order){
+        $.ajax({
+            url:'/verify-payment',
+            data:{
+                payment,
+                order
+            },
+            method:'post',
+            success:(response)=>{
+                alert(response.orderId)
+                if(response.status){
+                    location.href ='/order-success/'+response.orderId
+                }
+            }
+        })
     }
 
 
